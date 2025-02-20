@@ -1,0 +1,7 @@
+setDefaultTab("Main")
+
+macro(10, "Seguir Target", function()
+  if g_game.isAttacking() then
+    return autoWalk(g_game.getAttackingCreature():getPosition(), 10, {ignoreNonPathable=true, precision=1})
+  end
+end)
