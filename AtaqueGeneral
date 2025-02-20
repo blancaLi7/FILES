@@ -1,0 +1,30 @@
+setDefaultTab("Main")
+
+macro(200, "Ataque General", function()
+    local ignoredMonsters = {
+        ['paladin familiar'] = true,
+        ['knight familiar'] = true, 
+        ['sorcerer familiar'] = true,
+        ['druid familiar'] = true,
+        ['dog'] = true, ['blade'] = true,
+        ['constantine'] = true,
+    }
+
+    local closestMonster = nil
+    local closestDistance = 6 -- Distancia máxima permitida (5 + 1)
+
+    local spectators = g_map.getSpectators(g_game.getLocalPlayer():getPosition(), false)
+    for _, creature in pairs(spectators) do
+        if not isInPz() and creature:isMonster() and not ignoredMonsters[creature:getName():lower()] then
+            local distance = getDistanceBetween(pos(), creature:getPosition())
+            if distance >= 1 and distance <= 5 and distance < closestDistance then
+                closestMonster = creature
+                closestDistance = distance
+            end
+        end
+    end
+
+    if closestMonster and not g_game.isAttacking() then
+        g_game.attack(closestMonster)
+    end
+end)
