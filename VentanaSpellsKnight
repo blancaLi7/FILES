@@ -1,0 +1,404 @@
+setDefaultTab("Main")
+
+g_ui.loadUIFromString([[
+menPanel < Panel
+  margin: 2
+  margin-bottom: 17
+  layout:
+    type: verticalBox
+
+ConfigWindowKnight < MainWindow
+  !text: tr('- ELITE KNIGHT -')
+  font: terminus-10px
+  color: blue
+  size: 200 250
+  @onEscape: self:hide()
+
+  TabBar
+    id: spellsTabBar
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 2
+
+  Panel
+    id: spellsImagem
+    anchors.top: spellsTabBar.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    image-border: 2
+
+  Button
+    id: closeButton
+    !text: tr('Cerrar')
+    font: cipsoftFont
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    size: 49 21
+    margin-top: 1
+    margin-right: -5
+    margin-bottom: -5
+]])
+
+local panelName = "configKnight"
+if not storage[panelName] then
+  storage[panelName] = {
+    enabled = false,
+  }
+end
+
+local config = storage[panelName]
+
+rootWidget = g_ui.getRootWidget()
+if rootWidget then
+  configWindowKnight = UI.createWindow('ConfigWindowKnight', rootWidget)
+  configWindowKnight:hide()
+  local TabBarSpells = configWindowKnight.spellsTabBar
+  TabBarSpells:setContentWidget(configWindowKnight.spellsImagem)
+
+  -- Panel para macros Normales
+  local normalPanel = g_ui.createWidget("menPanel")
+  normalPanel:setId("panelNormal")
+  TabBarSpells:addTab("PVP", normalPanel)
+
+  -- Panel para macros No PK
+  local noPkPanel = g_ui.createWidget("menPanel")
+  noPkPanel:setId("panelNoPK")
+  TabBarSpells:addTab("No PVP", noPkPanel)
+
+  -- Panel para macros Wheel
+  local wheelPanel = g_ui.createWidget("menPanel")
+  wheelPanel:setId("panelWheel")
+  TabBarSpells:addTab("Wheel", wheelPanel)
+
+  -- Panel para macros Más
+  local masPanel = g_ui.createWidget("menPanel")
+  masPanel:setId("panelMas")
+  TabBarSpells:addTab(" + ", masPanel)
+
+  UI.Separator(normalPanel)
+  UI.Separator(noPkPanel)
+  UI.Separator(wheelPanel)
+  UI.Separator(masPanel)
+
+  local listaMacrosNormal = {}
+  local listaMacrosNoPK = {}
+  local listaMacrosWheel = {}
+  local listaMacrosMas = {}
+
+  -- Macros para hechizos del Knight
+  local utitoTempo = macro(12010, "Utito Tempo", function()
+      if g_game.isAttacking() then
+          say("utito tempo")
+      end
+  end)
+
+  local exetaAmpRes = macro(2510, "Exeta Amp Res", function()
+      if g_game.isAttacking() then
+          say("exeta amp res")
+      end
+  end)
+
+  local exetaRes = macro(6010, "Exeta Res", function()
+      if g_game.isAttacking() then
+          say("exeta res")
+      end
+  end)
+
+  local exoriIco = macro(6010, "Exori Ico", function()
+      if g_game.isAttacking() then
+          say("exori ico")
+      end
+  end)
+
+  local exoriHur = macro(6010, "Exori Hur", function()
+      if g_game.isAttacking() then
+          say("exori hur")
+      end
+  end)
+
+  local exoriGranIco = macro(4010, "Exori Gran Ico", function()
+      if g_game.isAttacking() then
+          say("exori gran ico")
+      end
+  end)
+
+  local exoriMin = macro(4010, "Exori Min", function()
+      if g_game.isAttacking() then
+          say("exori min")
+      end
+  end)
+
+  local exori = macro(4010, "Exori", function()
+      if g_game.isAttacking() then
+          say("exori")
+      end
+  end)
+
+  local exoriGran = macro(6010, "Exori Gran", function()
+      if g_game.isAttacking() then
+          say("exori gran")
+      end
+  end)
+
+  -- Agregando los macros a la lista
+  table.insert(listaMacrosNormal, utitoTempo)
+  table.insert(listaMacrosNormal, exetaAmpRes)
+  table.insert(listaMacrosNormal, exetaRes)
+  table.insert(listaMacrosNormal, exoriIco)
+  table.insert(listaMacrosNormal, exoriHur)
+  table.insert(listaMacrosNormal, exoriGranIco)
+  table.insert(listaMacrosNormal, exoriMin)
+  table.insert(listaMacrosNormal, exori)
+  table.insert(listaMacrosNormal, exoriGran)
+
+-- Macros para hechizos del Knight (No-PK)
+local exoriMasNoPK = macro(4010, "Exori Mas (No-PK)", function()
+    local playerInScreen = false
+    if not g_game.isAttacking() then
+        return
+    end
+    for i, mob in ipairs(getSpectators()) do
+        if (getDistanceBetween(player:getPosition(), mob:getPosition()) <= 5 and mob:isPlayer()) and (player:getName() ~= mob:getName()) then
+            playerInScreen = true
+        end
+    end
+    if not playerInScreen then
+        say("exori mas")
+    end
+end)
+
+local exoriGranNoPK = macro(6010, "Exori Gran (No-PK)", function()
+    local playerInScreen = false
+    if not g_game.isAttacking() then
+        return
+    end
+    for i, mob in ipairs(getSpectators()) do
+        if (getDistanceBetween(player:getPosition(), mob:getPosition()) <= 4 and mob:isPlayer()) and (player:getName() ~= mob:getName()) then
+            playerInScreen = true
+        end
+    end
+    if not playerInScreen then
+        say("exori gran")
+    end
+end)
+
+local exoriNoPK = macro(4010, "Exori (No-PK)", function()
+    local playerInScreen = false
+    if not g_game.isAttacking() then
+        return
+    end
+    for i, mob in ipairs(getSpectators()) do
+        if (getDistanceBetween(player:getPosition(), mob:getPosition()) <= 2 and mob:isPlayer()) and (player:getName() ~= mob:getName()) then
+            playerInScreen = true
+        end
+    end
+    if not playerInScreen then
+        say("exori")
+    end
+end)
+
+  -- Agregando los macros No-PK a la lista
+  table.insert(listaMacrosNoPK, exoriMasNoPK)
+  table.insert(listaMacrosNoPK, exoriGranNoPK)
+  table.insert(listaMacrosNoPK, exoriNoPK)
+
+  local ampkor = macro(6010, "exori amp kor", function()
+    if g_game.isAttacking() then
+      say("exori amp kor")
+    end
+  end)
+
+  table.insert(listaMacrosWheel, ampkor)
+
+
+  local pvp = true
+
+  local Spells = {
+    {
+      name = "exori gran",
+      cast = true,
+      amount = 3,
+      distance = 1,
+      safe = true,
+      turning = false,
+      manaCost = 340
+    },
+    {
+      name = "exori",
+      cast = true,
+      amount = 2,
+      distance = 1,
+      safe = true,
+      turning = false,
+      manaCost = 115
+    },
+    {
+      name = "exori",
+      cast = true,
+      amount = 1,
+      distance = 1,
+      safe = true,
+      turning = false,
+      manaCost = 115
+    },
+    {
+      name = "exori min",
+      cast = true,
+      amount = 2,
+      distance = 1,
+      safe = true,
+      turning = true,
+      manaCost = 200
+    },
+    {
+      name = "exori hur",
+      cast = true,
+      amount = 1,
+      distance = 5,
+      safe = true,
+      turning = true,
+      manaCost = 100
+    },
+    {
+      name = "exori mas",
+      cast = true,
+      amount = 2,
+      distance = 4,
+      safe = true,
+      turning = true,
+      manaCost = 120
+    }
+  }
+
+  macro(500, "Spell x Creature (V+12)", function()
+    local isSafe = true
+    local target = g_game.getAttackingCreature()
+    local direct
+
+    if not g_game.isAttacking() then
+      return
+    end
+
+    if player:getPosition().z == target:getPosition().z then
+      if player:getPosition().x > target:getPosition().x then
+        direct = 3 -- oeste
+      elseif player:getPosition().x < target:getPosition().x then
+        direct = 1 -- este
+      elseif player:getPosition().y < target:getPosition().y then
+        direct = 2 -- norte
+      elseif player:getPosition().y > target:getPosition().y then
+        direct = 0 -- sur
+      end
+    end
+
+    for _, spell in ipairs(Spells) do
+      local specAmount = 0
+      for _, mob in ipairs(getSpectators()) do
+        if (getDistanceBetween(player:getPosition(), mob:getPosition()) <= spell.distance and mob:isMonster()) then
+          specAmount = specAmount + 1
+        end
+        if (mob:isPlayer() and player:getName() ~= mob:getName()) then
+          isSafe = false
+        end
+      end
+      if (spell.cast) and (specAmount >= spell.amount) and (mana() >= spell.manaCost) then
+        if spell.turning then
+          turn(direct)
+        end
+        if pvp then
+          if isSafe then
+            say(spell.name)
+          elseif not isSafe and spell.safe then
+            say(spell.name)
+          end
+        else
+          say(spell.name)
+        end
+      end
+    end
+  end, masPanel)
+
+
+  -- Creación de checkboxes para los paneles
+  local checkboxesNormal = {}
+  local checkboxesNoPK = {}
+  local checkboxesWheel = {}
+  local checkboxesMas = {}
+
+  -- Agregar checkboxes para el panel Normal
+  for _, mac in ipairs(listaMacrosNormal) do
+      local checkbox = g_ui.createWidget("CheckBox", normalPanel)
+      checkbox:setText(mac.switch:getText())
+      checkbox.onCheckChange = function(wid, isChecked)
+          mac.setOn(isChecked and config.enabled)
+      end
+      checkbox:setChecked(mac.isOn())
+      mac.switch:setVisible(false)
+      table.insert(checkboxesNormal, checkbox)
+  end
+
+  -- Agregar checkboxes para el panel No PK
+  for _, mac in ipairs(listaMacrosNoPK) do
+      local checkbox = g_ui.createWidget("CheckBox", noPkPanel)
+      checkbox:setText(mac.switch:getText())
+      checkbox.onCheckChange = function(wid, isChecked)
+          mac.setOn(isChecked and config.enabled)
+      end
+      checkbox:setChecked(mac.isOn())
+      mac.switch:setVisible(false)
+      table.insert(checkboxesNoPK, checkbox)
+  end
+
+  -- Agregar checkboxes para el panel Wheel
+  for _, mac in ipairs(listaMacrosWheel) do
+      local checkbox = g_ui.createWidget("CheckBox", wheelPanel)
+      checkbox:setText(mac.switch:getText())
+      checkbox.onCheckChange = function(wid, isChecked)
+          mac.setOn(isChecked and config.enabled)
+      end
+      checkbox:setChecked(mac.isOn())
+      mac.switch:setVisible(false)
+      table.insert(checkboxesWheel, checkbox)
+  end
+
+  -- Agregar checkboxes para el panel Más
+  for _, mac in ipairs(listaMacrosMas) do
+      local checkbox = g_ui.createWidget("CheckBox", masPanel)
+      checkbox:setText(mac.switch:getText())
+      checkbox.onCheckChange = function(wid, isChecked)
+          mac.setOn(isChecked and config.enabled)
+      end
+      checkbox:setChecked(mac.isOn())
+      mac.switch:setVisible(false)
+      table.insert(checkboxesMas, checkbox)
+  end
+
+  configWindowKnight.closeButton.onClick = function(widget)
+      configWindowKnight:hide()
+  end
+
+  -- Switch para habilitar/deshabilitar los macros
+  UI.SwitchAndButton({on = config.enabled, left = "Knight Spells", right = "Menu"}, function(widget)
+      config.enabled = not config.enabled
+      for i, mac in ipairs(listaMacrosNormal) do
+          mac.setOn(config.enabled and checkboxesNormal[i]:isChecked())
+      end
+      for i, mac in ipairs(listaMacrosNoPK) do
+          mac.setOn(config.enabled and checkboxesNoPK[i]:isChecked())
+      end
+      for i, mac in ipairs(listaMacrosWheel) do
+          mac.setOn(config.enabled and checkboxesWheel[i]:isChecked())
+      end
+      for i, mac in ipairs(listaMacrosMas) do
+          mac.setOn(config.enabled and checkboxesMas[i]:isChecked())
+      end
+  end, function()
+      configWindowKnight:show()
+      configWindowKnight:raise()
+      configWindowKnight:focus()
+  end)
+end
+
+
