@@ -18,3 +18,59 @@ macro(6010, "Exori Hur", function()
     say("exori hur")
   end
 end, SpellsTab)
+
+
+
+local SpellsTab = addTab("Spells") -- Add new tab called
+local distance = 2
+macro(4010, "Exori (No-Pk)",  function() -- editar nome da spell
+    local playerInScreen = false
+    if not g_game.isAttacking() then
+        return
+    end
+    for i,mob in ipairs(getSpectators()) do
+        if (getDistanceBetween(player:getPosition(), mob:getPosition())  <= distance and mob:isPlayer())  and (player:getName() ~= mob:getName()) then
+            playerInScreen = true
+        end
+    end
+
+    if not playerInScreen then 
+      say("exori") --nadaxD
+    end
+end, SpellsTab)
+
+
+local SpellsTab = addTab("Spells") -- Add new tab called
+macro(4010, "Exori", function()
+  if g_game.isAttacking() then
+    say("exori")
+  end
+end, SpellsTab)
+
+local SpellsTab = addTab("Spells") -- Add new tab called
+local distance = 5
+macro(6010, "Exori Gran (No-Pk)",  function() -- editar nome da spell
+    local playerInScreen = false
+    if not g_game.isAttacking() then
+        return
+    end
+    for i,mob in ipairs(getSpectators()) do
+        if (getDistanceBetween(player:getPosition(), mob:getPosition())  <= distance and mob:isPlayer())  and (player:getName() ~= mob:getName()) then
+            playerInScreen = true
+        end
+    end
+
+    if not playerInScreen then 
+      say("exori gran") --nadaxD
+    end
+end, SpellsTab)
+
+
+local SpellsTab = addTab("Spells") -- Add new tab called
+macro(6010, "Exori Gran", function()
+  if g_game.isAttacking() then
+    say("exori gran")
+  end
+end, SpellsTab)
+local SpellTab = addTab("Spells")
+
