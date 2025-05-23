@@ -3,3 +3,18 @@ macro(6010, "Exeta Res", function()
     say("exeta res")
   end
 end)
+
+
+local SpellsTab = addTab("Spells") -- Add new tab called
+macro(6010, "Exori Ico", function()
+  if g_game.isAttacking() then
+    say("exori ico")
+  end
+end, SpellsTab)
+
+local SpellsTab = addTab("Spells") -- Add new tab called
+macro(6010, "Exori Hur", function()
+  if g_game.isAttacking() then
+    say("exori hur")
+  end
+end, SpellsTab)
