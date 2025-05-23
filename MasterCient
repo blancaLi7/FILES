@@ -1,0 +1,5 @@
+macro(6010, "Exeta Res", function()
+  if g_game.isAttacking() then
+    say("exeta res")
+  end
+end)
